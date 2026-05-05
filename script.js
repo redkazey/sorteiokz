@@ -13,9 +13,12 @@ function tocarSomEfeito() {
 
 function soltarConfetes() {
     confetti.addConfetti({
-        emojis: ['🎉', '🎊', '✨', '💥', '⭐', '🎈'],
-        emojiSize: 40,
-        confettiNumber: 50,
+        confettiNumber: 90,
+        confettiColors: [
+            '#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffffff'
+        ],
+        confettiRadius: 6,
+        confettiSpeed: 2,
     });
 }
 
@@ -59,20 +62,54 @@ function sortearNumero() {
     }, 80);
 }
 
-// --- 2. SORTEIO DE NOMES ---
+// --- 2. SORTEIO DE NOMES (SISTEMA DE TAGS) ---
+let listaNomes = [];
+
+function adicionarNome() {
+    const input = document.getElementById('novoNome');
+    const nome = input.value.trim();
+    
+    if(nome && !listaNomes.includes(nome)) {
+        listaNomes.push(nome);
+        atualizarVisualizacaoNomes();
+        input.value = '';
+    }
+    input.focus();
+}
+
+function removerNome(nome) {
+    listaNomes = listaNomes.filter(n => n !== nome);
+    atualizarVisualizacaoNomes();
+}
+
+function limparNomes() {
+    listaNomes = [];
+    atualizarVisualizacaoNomes();
+}
+
+function atualizarVisualizacaoNomes() {
+    const container = document.getElementById('listaNomesContainer');
+    container.innerHTML = '';
+    
+    listaNomes.forEach(nome => {
+        const tag = document.createElement('div');
+        tag.className = 'tag-item';
+        tag.innerHTML = `${nome} <button onclick="removerNome('${nome}')">&times;</button>`;
+        container.appendChild(tag);
+    });
+}
+
 function sortearNome() {
-    const texto = document.getElementById('listaNomes').value;
-    const nomes = texto.split('\n').filter(nome => nome.trim() !== '');
     const resultadoEl = document.getElementById('resultadoNome');
 
-    if (nomes.length === 0) {
+    if (listaNomes.length === 0) {
         alert('Adicione pelo menos um nome!');
         return;
     }
 
     let contador = 0;
     const intervalo = setInterval(() => {
-        const aleatorio = nomes[Math.floor(Math.random() * nomes.length)];
+        const aleatorio = listaNomes[Math.floor(Math.random() * listaNomes.length)];
         resultadoEl.textContent = aleatorio;
         contador++;
         if(contador > 15) {
@@ -84,9 +121,9 @@ function sortearNome() {
 }
 
 // --- 3. ROLETA EDITÁVEL ---
-const canvas = document.getElementById('roleta');
+const canvas = document.getElementById('roletaCanvas');
 let opcoesRoleta = ['Prêmio 1', 'Prêmio 2', 'Prêmio 3', 'Prêmio 4', 'Prêmio 5', 'Prêmio 6'];
-const cores = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#FF9FF3', '#54a0ff'];
+const cores = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#FF9FF3', '#54A0FF'];
 
 if (canvas) {
     const ctx = canvas.getContext('2d');
@@ -105,8 +142,12 @@ if (canvas) {
             ctx.beginPath();
             ctx.moveTo(tamanho/2, tamanho/2);
             ctx.arc(tamanho/2, tamanho/2, tamanho/2, inicio, fim);
+            ctx.closePath();
             ctx.fillStyle = cores[i % cores.length];
             ctx.fill();
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 2;
+            ctx.stroke();
             
             ctx.save();
             ctx.translate(tamanho/2, tamanho/2);
@@ -118,20 +159,44 @@ if (canvas) {
         });
     }
 
-    window.atualizarRoleta = function() {
-        const texto = document.getElementById('opcoesRoleta').value;
-        opcoesRoleta = texto.split('\n').filter(item => item.trim() !== '');
+    window.adicionarOpcao = function() {
+        const input = document.getElementById('novaOpcao');
+        const texto = input.value.trim();
         
-        if(opcoesRoleta.length < 2) {
-            alert('Coloque pelo menos 2 opções!');
-            return;
+        if(texto && !opcoesRoleta.includes(texto)) {
+            opcoesRoleta.push(texto);
+            atualizarListaVisual();
+            desenharRoleta();
+            input.value = '';
         }
-        
+        input.focus();
+    }
+
+    window.removerOpcao = function(item) {
+        opcoesRoleta = opcoesRoleta.filter(o => o !== item);
+        atualizarListaVisual();
         desenharRoleta();
-        alert('Roleta atualizada! ✅');
+    }
+
+    function atualizarListaVisual() {
+        const container = document.getElementById('listaOpcoesContainer');
+        if(!container) return;
+        
+        container.innerHTML = '';
+        opcoesRoleta.forEach(opcao => {
+            const tag = document.createElement('div');
+            tag.className = 'tag-item';
+            tag.innerHTML = `${opcao} <button onclick="removerOpcao('${opcao}')">&times;</button>`;
+            container.appendChild(tag);
+        });
     }
 
     window.girarRoleta = function() {
+        if(opcoesRoleta.length < 2) {
+            alert('Adicione pelo menos 2 opções!');
+            return;
+        }
+
         const anguloAleatorio = Math.random() * 360 + 360 * 5;
         canvas.style.transition = 'transform 4s cubic-bezier(0.2, 0.8, 0.2, 1)';
         canvas.style.transform = `rotate(${anguloAleatorio}deg)`;
@@ -144,10 +209,12 @@ if (canvas) {
         }, 4000);
     }
 
+    // Inicializar
+    atualizarListaVisual();
     desenharRoleta();
 }
 
-// --- 4. CARA OU COROA COM PERSONALIZAÇÃO ---
+// --- 4. CARA OU COROA PROFISSIONAL ---
 window.jogarMoeda = function() {
     const moedaEl = document.getElementById('moeda');
     const resultadoEl = document.getElementById('resultadoMoeda');
@@ -156,15 +223,12 @@ window.jogarMoeda = function() {
     
     if(!moedaEl) return;
 
-    // Atualiza os textos da moeda antes de jogar
-    document.getElementById('ladoCara').innerText = textoCaraInput.value || 'CARA';
-    document.getElementById('ladoCoroa').innerText = textoCoroaInput.value || 'COROA';
+    document.getElementById('textoCaraDisplay').innerText = textoCaraInput.value || 'CARA';
+    document.getElementById('textoCoroaDisplay').innerText = textoCoroaInput.value || 'COROA';
 
-    // Resetar classes
     moedaEl.classList.remove('parando', 'cara-final', 'coroa-final');
     void moedaEl.offsetWidth;
     
-    // Começar a girar muito rápido
     moedaEl.classList.add('girando');
 
     setTimeout(() => {
@@ -180,11 +244,10 @@ window.jogarMoeda = function() {
             moedaEl.classList.add('parando', 'coroa-final');
         }
 
-        // Soltar efeito no final
         setTimeout(() => {
             tocarSomEfeito();
             soltarConfetes();
         }, 800);
 
-    }, 1000); // Gira por 1 segundo
+    }, 1000);
 }
