@@ -1,4 +1,23 @@
-console.log("Script carregado!"); // Aviso para ver se está funcionando
+console.log("Script Carregado!");
+
+// --- INICIALIZAÇÃO DOS EFEITOS ---
+const confetti = new JSConfetti();
+
+function tocarSomEfeito() {
+    const som = document.getElementById('somFesta');
+    if(som) {
+        som.currentTime = 0;
+        som.play().catch(e => console.log("Som autoplay bloqueado:", e));
+    }
+}
+
+function soltarConfetes() {
+    confetti.addConfetti({
+        emojis: ['🎉', '🎊', '✨', '💥', '⭐', '🎈'],
+        emojiSize: 40,
+        confettiNumber: 50,
+    });
+}
 
 // --- TROCA DE ABAS ---
 document.addEventListener('DOMContentLoaded', function() {
@@ -7,13 +26,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     botoes.forEach(btn => {
         btn.addEventListener('click', () => {
-            const alvo = btn.getAttribute('data-tab');
-            
-            // Remove active de todos
+            const alvo = btn.dataset.tab;
             botoes.forEach(b => b.classList.remove('active'));
             abas.forEach(a => a.classList.remove('active'));
-            
-            // Adiciona active no clicado
             btn.classList.add('active');
             document.getElementById(alvo).classList.add('active');
         });
@@ -36,7 +51,11 @@ function sortearNumero() {
         const aleatorio = Math.floor(Math.random() * (max - min + 1)) + min;
         resultadoEl.textContent = aleatorio;
         contador++;
-        if(contador > 10) clearInterval(intervalo);
+        if(contador > 12) {
+            clearInterval(intervalo);
+            tocarSomEfeito();
+            soltarConfetes();
+        }
     }, 80);
 }
 
@@ -56,69 +75,109 @@ function sortearNome() {
         const aleatorio = nomes[Math.floor(Math.random() * nomes.length)];
         resultadoEl.textContent = aleatorio;
         contador++;
-        if(contador > 15) clearInterval(intervalo);
+        if(contador > 15) {
+            clearInterval(intervalo);
+            tocarSomEfeito();
+            soltarConfetes();
+        }
     }, 100);
 }
 
-// --- 3. ROLETA ---
+// --- 3. ROLETA EDITÁVEL ---
 const canvas = document.getElementById('roleta');
+let opcoesRoleta = ['Prêmio 1', 'Prêmio 2', 'Prêmio 3', 'Prêmio 4', 'Prêmio 5', 'Prêmio 6'];
+const cores = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#FF9FF3', '#54a0ff'];
+
 if (canvas) {
     const ctx = canvas.getContext('2d');
     const tamanho = 300;
     canvas.width = tamanho;
     canvas.height = tamanho;
 
-    const opcoes = ['Prêmio 1', 'Prêmio 2', 'Prêmio 3', 'Prêmio 4', 'Prêmio 5', 'Prêmio 6'];
-    const cores = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD'];
-
     function desenharRoleta() {
-        const anguloPorCorte = (2 * Math.PI) / opcoes.length;
+        ctx.clearRect(0, 0, tamanho, tamanho);
+        const anguloPorCorte = (2 * Math.PI) / opcoesRoleta.length;
         
-        opcoes.forEach((opcao, i) => {
+        opcoesRoleta.forEach((opcao, i) => {
             const inicio = i * anguloPorCorte;
             const fim = (i + 1) * anguloPorCorte;
 
             ctx.beginPath();
             ctx.moveTo(tamanho/2, tamanho/2);
             ctx.arc(tamanho/2, tamanho/2, tamanho/2, inicio, fim);
-            ctx.fillStyle = cores[i];
+            ctx.fillStyle = cores[i % cores.length];
             ctx.fill();
             
             ctx.save();
             ctx.translate(tamanho/2, tamanho/2);
             ctx.rotate(inicio + anguloPorCorte / 2);
             ctx.fillStyle = '#fff';
-            ctx.font = 'bold 14px Inter';
-            ctx.fillText(opcao, 50, 5);
+            ctx.font = 'bold 12px Inter';
+            ctx.fillText(opcao.substring(0, 10), 40, 5);
             ctx.restore();
         });
     }
-    desenharRoleta();
+
+    window.atualizarRoleta = function() {
+        const texto = document.getElementById('opcoesRoleta').value;
+        opcoesRoleta = texto.split('\n').filter(item => item.trim() !== '');
+        
+        if(opcoesRoleta.length < 2) {
+            alert('Coloque pelo menos 2 opções!');
+            return;
+        }
+        
+        desenharRoleta();
+        alert('Roleta atualizada! ✅');
+    }
 
     window.girarRoleta = function() {
         const anguloAleatorio = Math.random() * 360 + 360 * 5;
+        canvas.style.transition = 'transform 4s cubic-bezier(0.2, 0.8, 0.2, 1)';
         canvas.style.transform = `rotate(${anguloAleatorio}deg)`;
         
         setTimeout(() => {
-            const resultado = opcoes[Math.floor(Math.random() * opcoes.length)];
+            const resultado = opcoesRoleta[Math.floor(Math.random() * opcoesRoleta.length)];
             document.getElementById('resultadoRoleta').textContent = resultado;
+            tocarSomEfeito();
+            soltarConfetes();
         }, 4000);
     }
+
+    desenharRoleta();
 }
 
-// --- 4. CARA OU COROA ---
+// --- 4. CARA OU COROA COM ANIMAÇÃO TOP ---
 window.jogarMoeda = function() {
     const moedaEl = document.getElementById('moeda');
     const resultadoEl = document.getElementById('resultadoMoeda');
     
     if(!moedaEl) return;
-    
-    moedaEl.classList.remove('virar');
+
+    // Resetar classes
+    moedaEl.classList.remove('parando', 'cara-final', 'coroa-final');
     void moedaEl.offsetWidth;
-    moedaEl.classList.add('virar');
     
+    // Começar a girar muito rápido
+    moedaEl.classList.add('girando');
+
     setTimeout(() => {
+        moedaEl.classList.remove('girando');
+        
         const sorteio = Math.random() < 0.5 ? 'CARA' : 'COROA';
         resultadoEl.textContent = sorteio;
-    }, 1000);
+
+        if(sorteio === 'CARA') {
+            moedaEl.classList.add('parando', 'cara-final');
+        } else {
+            moedaEl.classList.add('parando', 'coroa-final');
+        }
+
+        // Soltar efeito no final
+        setTimeout(() => {
+            tocarSomEfeito();
+            soltarConfetes();
+        }, 800);
+
+    }, 1000); // Gira por 1 segundo
 }
