@@ -113,7 +113,7 @@ if (canvas) {
             ctx.rotate(inicio + anguloPorCorte / 2);
             ctx.fillStyle = '#fff';
             ctx.font = 'bold 12px Inter';
-            ctx.fillText(opcao.substring(0, 10), 40, 5);
+            ctx.fillText(opcao.substring(0, 12), 40, 5);
             ctx.restore();
         });
     }
@@ -147,12 +147,18 @@ if (canvas) {
     desenharRoleta();
 }
 
-// --- 4. CARA OU COROA COM ANIMAÇÃO TOP ---
+// --- 4. CARA OU COROA COM PERSONALIZAÇÃO ---
 window.jogarMoeda = function() {
     const moedaEl = document.getElementById('moeda');
     const resultadoEl = document.getElementById('resultadoMoeda');
+    const textoCaraInput = document.getElementById('textoCara');
+    const textoCoroaInput = document.getElementById('textoCoroa');
     
     if(!moedaEl) return;
+
+    // Atualiza os textos da moeda antes de jogar
+    document.getElementById('ladoCara').innerText = textoCaraInput.value || 'CARA';
+    document.getElementById('ladoCoroa').innerText = textoCoroaInput.value || 'COROA';
 
     // Resetar classes
     moedaEl.classList.remove('parando', 'cara-final', 'coroa-final');
@@ -165,7 +171,8 @@ window.jogarMoeda = function() {
         moedaEl.classList.remove('girando');
         
         const sorteio = Math.random() < 0.5 ? 'CARA' : 'COROA';
-        resultadoEl.textContent = sorteio;
+        const textoFinal = sorteio === 'CARA' ? textoCaraInput.value : textoCoroaInput.value;
+        resultadoEl.textContent = textoFinal || sorteio;
 
         if(sorteio === 'CARA') {
             moedaEl.classList.add('parando', 'cara-final');
