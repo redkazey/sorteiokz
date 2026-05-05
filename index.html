@@ -47,8 +47,8 @@
             <!-- Aba 2: Nomes -->
             <div class="tab-content" id="nomes">
                 <h2>Sorteio de Nomes</h2>
-                <label>Digite um nome por linha:</label>
-                <textarea id="listaNomes" placeholder="Ex:&#10;Maria&#10;João&#10;Pedro" rows="8"></textarea>
+                <label>📋 Lista de Nomes (um por linha):</label>
+                <textarea id="listaNomes" placeholder="Digite aqui...&#10;João&#10;Maria&#10;Pedro&#10;Ana" rows="8"></textarea>
                 <button class="btn-sortear" onclick="sortearNome()">Sortear Nome</button>
                 <div class="resultado" id="resultadoNome">?</div>
             </div>
@@ -57,11 +57,10 @@
             <div class="tab-content" id="roleta">
                 <h2>Roleta da Sorte</h2>
                 
-                <!-- Campo para editar opções -->
                 <div class="input-roleta">
-                    <label>Digite uma opção por linha:</label>
-                    <textarea id="opcoesRoleta" placeholder="Ex:&#10;Ganhou!&#10;Prêmio Top&#10;Tente novamente" rows="4">Prêmio 1&#10;Prêmio 2&#10;Prêmio 3&#10;Prêmio 4&#10;Prêmio 5&#10;Prêmio 6</textarea>
-                    <button class="btn-atualizar" onclick="atualizarRoleta()">Atualizar Roleta</button>
+                    <label>⚙️ Opções da Roleta (uma por linha):</label>
+                    <textarea id="opcoesRoleta" placeholder="Exemplo:&#10;Ganhou um Prêmio!&#10;Pergunta Difícil&#10;Passar a vez&#10;Prêmio Top" rows="4">Prêmio 1&#10;Prêmio 2&#10;Prêmio 3&#10;Prêmio 4&#10;Prêmio 5&#10;Prêmio 6</textarea>
+                    <button class="btn-atualizar" onclick="atualizarRoleta()">✅ Atualizar Roleta</button>
                 </div>
 
                 <div class="roleta-container">
@@ -75,10 +74,25 @@
             <!-- Aba 4: Cara ou Coroa -->
             <div class="tab-content" id="moeda">
                 <h2>Cara ou Coroa</h2>
+                
+                <div class="input-moeda">
+                    <label>🎨 Personalizar Lados (opcional):</label>
+                    <div class="input-duplo">
+                        <div>
+                            <label>Texto Cara</label>
+                            <input type="text" id="textoCara" value="CARA">
+                        </div>
+                        <div>
+                            <label>Texto Coroa</label>
+                            <input type="text" id="textoCoroa" value="COROA">
+                        </div>
+                    </div>
+                </div>
+
                 <div class="moeda-container">
                     <div class="moeda" id="moeda">
-                        <div class="lado cara">🦁</div>
-                        <div class="lado coroa">👑</div>
+                        <div class="lado cara" id="ladoCara">🦁</div>
+                        <div class="lado coroa" id="ladoCoroa">👑</div>
                     </div>
                 </div>
                 <button class="btn-sortear" onclick="jogarMoeda()">Jogar Moeda</button>
@@ -86,6 +100,11 @@
             </div>
 
         </div>
+
+        <!-- RODAPÉ -->
+        <footer class="footer">
+            <p>Desenvolvido por <a href="https://t.me/redkz" target="_blank">@redkz</a></p>
+        </footer>
     </div>
 
     <!-- Som de Festa -->
