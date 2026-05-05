@@ -62,7 +62,7 @@ function sortearNumero() {
     }, 80);
 }
 
-// --- 2. SORTEIO DE NOMES (SISTEMA DE TAGS) ---
+// --- 2. SORTEIO DE NOMES ---
 let listaNomes = [];
 
 function adicionarNome() {
@@ -120,7 +120,9 @@ function sortearNome() {
     }, 100);
 }
 
-// --- 3. ROLETA - CORRIGIDO (Gira suave sempre) ---
+// ==============================================
+// 🎡 ROLETA - CÓDIGO TOTALMENTE REESCRITO E SEGURO
+// ==============================================
 const canvas = document.getElementById('roletaCanvas');
 let opcoesRoleta = ['Prêmio 1', 'Prêmio 2', 'Prêmio 3', 'Prêmio 4', 'Prêmio 5', 'Prêmio 6'];
 const cores = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#FF9FF3', '#54A0FF'];
@@ -130,7 +132,7 @@ if (canvas) {
     const tamanho = 300;
     canvas.width = tamanho;
     canvas.height = tamanho;
-    let anguloAtual = 0; // Guarda a posição
+    let anguloAtual = 0;
 
     function desenharRoleta() {
         ctx.clearRect(0, 0, tamanho, tamanho);
@@ -192,22 +194,17 @@ if (canvas) {
         });
     }
 
-    // FUNÇÃO CORRIGIDA - Sempre gira suave
+    // ✅ FUNÇÃO DE GIRAR CORRIGIDA - MÉTODO SEGURO
     window.girarRoleta = function() {
         if(opcoesRoleta.length < 2) {
             alert('Adicione pelo menos 2 opções!');
             return;
         }
 
-        // Soma o ângulo novo ao atual para continuar de onde parou
-        anguloAtual += Math.random() * 360 + 360 * 5; 
-        
-        canvas.style.transition = 'none'; // Reseta rápido
-        canvas.style.transform = `rotate(${anguloAtual}deg)`;
-        
-        // Força o navegador a aplicar a mudança
-        void canvas.offsetWidth; 
-        
+        // Soma mais voltas para sempre girar
+        anguloAtual += (Math.random() * 360) + (360 * 5);
+
+        // Aplica a rotação
         canvas.style.transition = 'transform 4s cubic-bezier(0.2, 0.8, 0.2, 1)';
         canvas.style.transform = `rotate(${anguloAtual}deg)`;
         
@@ -224,7 +221,9 @@ if (canvas) {
     desenharRoleta();
 }
 
-// --- 4. CARA OU COROA - CORRIGIDO ---
+// ==============================================
+// 🪙 MOEDA - CÓDIGO TOTALMENTE REESCRITO
+// ==============================================
 window.jogarMoeda = function() {
     const moedaEl = document.getElementById('moeda');
     const resultadoEl = document.getElementById('resultadoMoeda');
@@ -237,10 +236,10 @@ window.jogarMoeda = function() {
     document.getElementById('textoCaraDisplay').innerText = textoCaraInput.value || 'CARA';
     document.getElementById('textoCoroaDisplay').innerText = textoCoroaInput.value || 'COROA';
 
-    // 🔥 O TRUQUE: Remove e readiciona para forçar a animação
+    // 🔧 RESET FORÇADO - O SEGREDO PARA FUNCIONAR SEMPRE
+    moedaEl.style.transition = 'none';
     moedaEl.classList.remove('girando', 'parando', 'cara-final', 'coroa-final');
     
-    // Pequeno timeout para o navegador "sentir" a mudança
     setTimeout(() => {
         moedaEl.classList.add('girando');
 
@@ -260,9 +259,10 @@ window.jogarMoeda = function() {
             setTimeout(() => {
                 tocarSomEfeito();
                 soltarConfetes();
-            }, 600);
+            }, 800);
 
-        }, 1000); // Tempo girando rápido
+        }, 1000);
 
-    }, 10);
+    }, 50);
 }
+
