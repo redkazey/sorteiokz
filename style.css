@@ -16,9 +16,9 @@ body {
 
 .container {
     background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-radius: 20px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 24px;
     border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
     width: 100%;
@@ -49,7 +49,6 @@ body {
     margin-top: 8px;
 }
 
-/* Abas */
 .tabs {
     display: flex;
     flex-wrap: wrap;
@@ -61,12 +60,12 @@ body {
 
 .tab-btn {
     flex: 1;
-    min-width: 120px;
-    padding: 12px 20px;
+    min-width: 110px;
+    padding: 12px 15px;
     border: none;
     background: rgba(255, 255, 255, 0.1);
     color: #fff;
-    border-radius: 10px;
+    border-radius: 12px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -81,10 +80,8 @@ body {
 .tab-btn.active {
     background: rgba(255, 255, 255, 0.25);
     border-color: rgba(255, 255, 255, 0.4);
-    color: white;
 }
 
-/* Conteúdo */
 .tab-content {
     display: none;
     animation: fadeIn 0.4s ease;
@@ -97,11 +94,69 @@ body {
 .tab-content h2 {
     text-align: center;
     color: #fff;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
     font-size: 1.5rem;
 }
 
-.input-group, .input-roleta, .input-moeda {
+/* Campos de Input e Tags */
+.add-item {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.add-item input {
+    flex: 1;
+    padding: 12px 15px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+}
+
+.btn-add {
+    padding: 12px 20px;
+    background: #00b894;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.items-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    background: rgba(0,0,0,0.1);
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    min-height: 60px;
+}
+
+.tag-item {
+    background: rgba(255,255,255,0.9);
+    color: #333;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tag-item button {
+    background: none;
+    border: none;
+    color: #ff4757;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.input-group, .input-moeda {
     background: rgba(255, 255, 255, 0.1);
     padding: 20px;
     border-radius: 15px;
@@ -129,9 +184,9 @@ label {
     font-weight: 600;
 }
 
-input, textarea {
+input {
     width: 100%;
-    padding: 15px;
+    padding: 12px 15px;
     background: rgba(255, 255, 255, 0.9);
     border: none;
     border-radius: 10px;
@@ -139,44 +194,48 @@ input, textarea {
     color: #333;
 }
 
-input:focus, textarea:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(255,255,255,0.3);
-}
-
-textarea {
-    resize: vertical;
-}
-
 .btn-sortear {
     width: 100%;
-    padding: 18px;
-    margin: 20px 0;
+    padding: 16px;
+    margin: 10px 0;
     background: linear-gradient(135deg, #00b894, #00cec9);
     color: white;
     border: none;
-    border-radius: 10px;
+    border-radius: 12px;
     font-size: 1.1rem;
     font-weight: 700;
     cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
 }
 
 .btn-sortear:hover {
-    transform: scale(1.02);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    transform: scale(1.01);
+}
+
+.btn-group {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-clear {
+    padding: 16px;
+    background: rgba(255,255,255,0.2);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: bold;
+    cursor: pointer;
 }
 
 .resultado {
     background: rgba(0, 0, 0, 0.2);
     color: #fff;
-    padding: 30px;
+    padding: 25px;
     border-radius: 15px;
     text-align: center;
     font-size: 2.5rem;
     font-weight: 800;
-    min-height: 100px;
+    min-height: 90px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -184,15 +243,15 @@ textarea {
     border: 1px solid rgba(255,255,255,0.1);
 }
 
-/* Roleta */
+/* ROLETA */
 .roleta-container {
     position: relative;
     width: 300px;
     height: 300px;
-    margin: 0 auto;
+    margin: 20px auto;
 }
 
-#roleta {
+#roletaCanvas {
     transform: rotate(0deg);
     transition: transform 4s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
@@ -206,29 +265,19 @@ textarea {
     height: 0;
     border-left: 20px solid transparent;
     border-right: 20px solid transparent;
-    border-top: 30px solid #fff;
+    border-top: 30px solid #ffffff;
     z-index: 10;
-    filter: drop-shadow(0 0 5px rgba(0,0,0,0.3));
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
 }
 
-.btn-atualizar {
-    width: 100%;
-    padding: 12px;
-    margin-top: 10px;
-    background: rgba(255,255,255,0.2);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    border: 1px solid rgba(255,255,255,0.2);
+.texto-roleta {
+    text-align: center;
+    color: rgba(255,255,255,0.8);
+    margin: -10px 0 10px 0;
+    font-size: 1rem;
 }
 
-.btn-atualizar:hover {
-    background: rgba(255,255,255,0.3);
-}
-
-/* Moeda Girando 3D */
+/* MOEDA PROFISSIONAL 3D */
 .moeda-container {
     perspective: 1000px;
     height: 200px;
@@ -238,16 +287,15 @@ textarea {
 }
 
 .moeda {
-    width: 150px;
-    height: 150px;
+    width: 160px;
+    height: 160px;
     position: relative;
     transform-style: preserve-3d;
     transition: transform 1.5s ease-out;
-    transform: rotateY(0deg);
 }
 
 .moeda.girando {
-    animation: giroRapido 0.2s linear infinite;
+    animation: giroRapido 0.15s linear infinite;
 }
 
 @keyframes giroRapido {
@@ -255,24 +303,14 @@ textarea {
     to { transform: rotateY(360deg) scale(1.1); }
 }
 
-.moeda.parando {
-    animation: pararGiro 1.5s ease-out forwards;
-}
-
-@keyframes pararGiro {
-    0% { transform: rotateY(720deg) scale(1.2); }
-    50% { transform: rotateY(360deg) scale(1); }
-    100% { transform: rotateY(0deg) scale(1); }
-}
-
 .moeda.parando.cara-final { animation: pararCara 1.5s ease-out forwards; }
 .moeda.parando.coroa-final { animation: pararCoroa 1.5s ease-out forwards; }
 
 @keyframes pararCara {
-    to { transform: rotateY(0deg) scale(1.1); box-shadow: 0 0 50px rgba(255, 255, 255, 0.5); }
+    to { transform: rotateY(0deg) scale(1.15); box-shadow: 0 0 60px rgba(253, 203, 110, 0.8); }
 }
 @keyframes pararCoroa {
-    to { transform: rotateY(180deg) scale(1.1); box-shadow: 0 0 50px rgba(255, 255, 255, 0.5); }
+    to { transform: rotateY(180deg) scale(1.15); box-shadow: 0 0 60px rgba(178, 190, 195, 0.8); }
 }
 
 .lado {
@@ -283,20 +321,39 @@ textarea {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 4rem;
     backface-visibility: hidden;
-    box-shadow: inset 0 0 20px rgba(0,0,0,0.2);
+    border: 8px solid;
 }
 
 .cara {
-    background: linear-gradient(135deg, #fdcb6e, #e17055);
-    color: white;
+    background: radial-gradient(circle at 30% 30%, #fdcb6e, #e17055);
+    border-color: #feca57;
+    transform: rotateY(0deg);
 }
 
 .coroa {
-    background: linear-gradient(135deg, #b2bec3, #636e72);
-    color: white;
+    background: radial-gradient(circle at 30% 30%, #b2bec3, #636e72);
+    border-color: #dfe6e9;
     transform: rotateY(180deg);
+}
+
+.moeda-texto {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: white;
+    text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    z-index: 2;
+}
+
+.brilho {
+    position: absolute;
+    width: 60%;
+    height: 60%;
+    background: rgba(255,255,255,0.3);
+    border-radius: 50%;
+    top: 10%;
+    left: 10%;
+    filter: blur(10px);
 }
 
 /* Rodapé */
