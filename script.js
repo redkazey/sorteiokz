@@ -1,4 +1,4 @@
-// Troca de Abas
+// --- TROCA DE ABAS ---
 const botoes = document.querySelectorAll('.tab-btn');
 const abas = document.querySelectorAll('.tab-content');
 
@@ -6,15 +6,17 @@ botoes.forEach(btn => {
     btn.addEventListener('click', () => {
         const alvo = btn.dataset.tab;
         
+        // Remove active de todos
         botoes.forEach(b => b.classList.remove('active'));
         abas.forEach(a => a.classList.remove('active'));
         
+        // Adiciona active no clicado
         btn.classList.add('active');
         document.getElementById(alvo).classList.add('active');
     });
 });
 
-// 1. Sorteio de Números
+// --- 1. SORTEIO DE NÚMEROS ---
 function sortearNumero() {
     const min = parseInt(document.getElementById('numMin').value);
     const max = parseInt(document.getElementById('numMax').value);
@@ -34,7 +36,7 @@ function sortearNumero() {
     }, 80);
 }
 
-// 2. Sorteio de Nomes
+// --- 2. SORTEIO DE NOMES ---
 function sortearNome() {
     const texto = document.getElementById('listaNomes').value;
     const nomes = texto.split('\n').filter(nome => nome.trim() !== '');
@@ -54,14 +56,14 @@ function sortearNome() {
     }, 100);
 }
 
-// 3. Roleta
+// --- 3. ROLETA ---
 const canvas = document.getElementById('roleta');
 const ctx = canvas.getContext('2d');
 const tamanho = 300;
 canvas.width = tamanho;
 canvas.height = tamanho;
 
-const opcoes = ['Premio 1', 'Premio 2', 'Premio 3', 'Premio 4', 'Premio 5', 'Premio 6'];
+const opcoes = ['Prêmio 1', 'Prêmio 2', 'Prêmio 3', 'Prêmio 4', 'Prêmio 5', 'Prêmio 6'];
 const cores = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD'];
 
 function desenharRoleta() {
@@ -99,7 +101,7 @@ function girarRoleta() {
     }, 4000);
 }
 
-// 4. Cara ou Coroa
+// --- 4. CARA OU COROA ---
 function jogarMoeda() {
     const moedaEl = document.getElementById('moeda');
     const resultadoEl = document.getElementById('resultadoMoeda');
@@ -109,5 +111,7 @@ function jogarMoeda() {
     moedaEl.classList.add('virar');
     
     setTimeout(() => {
-        const sorteio = Math.random() < 0.5 ? 'CARA
-      
+        const sorteio = Math.random() < 0.5 ? 'CARA' : 'COROA';
+        resultadoEl.textContent = sorteio;
+    }, 1000);
+}
