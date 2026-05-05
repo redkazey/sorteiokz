@@ -56,8 +56,8 @@ function sortearNumero() {
         contador++;
         if(contador > 12) {
             clearInterval(intervalo);
-            tocarSomEfeito();
-            soltarConfetes();
+            tocarSomEfeito(); // ✅ Som
+            soltarConfetes(); // ✅ Confetes
         }
     }, 80);
 }
@@ -114,14 +114,14 @@ function sortearNome() {
         contador++;
         if(contador > 15) {
             clearInterval(intervalo);
-            tocarSomEfeito();
-            soltarConfetes();
+            tocarSomEfeito(); // ✅ Som
+            soltarConfetes(); // ✅ Confetes
         }
     }, 100);
 }
 
 // ==============================================
-// 🎡 ROLETA - CÓDIGO TOTALMENTE REESCRITO E SEGURO
+// 🎡 ROLETA - RESULTADO 100% PRECISO AGORA
 // ==============================================
 const canvas = document.getElementById('roletaCanvas');
 let opcoesRoleta = ['Prêmio 1', 'Prêmio 2', 'Prêmio 3', 'Prêmio 4', 'Prêmio 5', 'Prêmio 6'];
@@ -194,25 +194,33 @@ if (canvas) {
         });
     }
 
-    // ✅ FUNÇÃO DE GIRAR CORRIGIDA - MÉTODO SEGURO
+    // ✅ FUNÇÃO CORRIGIDA - AGORA O RESULTADO É EXATO
     window.girarRoleta = function() {
         if(opcoesRoleta.length < 2) {
             alert('Adicione pelo menos 2 opções!');
             return;
         }
 
-        // Soma mais voltas para sempre girar
-        anguloAtual += (Math.random() * 360) + (360 * 5);
+        // Sorteia o índice REAL
+        const indiceSorteado = Math.floor(Math.random() * opcoesRoleta.length);
+        const resultadoFinal = opcoesRoleta[indiceSorteado];
 
-        // Aplica a rotação
+        // Calcula o ângulo exato para parar naquele item
+        const anguloPorCorte = 360 / opcoesRoleta.length;
+        // Ajustamos para que a seta aponte exatamente no centro do prêmio
+        const anguloParada = 360 - (indiceSorteado * anguloPorCorte + anguloPorCorte / 2);
+        
+        // Soma várias voltas para dar impressão de giro
+        anguloAtual = anguloParada + (360 * 8); 
+
         canvas.style.transition = 'transform 4s cubic-bezier(0.2, 0.8, 0.2, 1)';
         canvas.style.transform = `rotate(${anguloAtual}deg)`;
         
+        // Mostra o resultado EXATO que foi calculado
         setTimeout(() => {
-            const resultado = opcoesRoleta[Math.floor(Math.random() * opcoesRoleta.length)];
-            document.getElementById('resultadoRoleta').textContent = resultado;
-            tocarSomEfeito();
-            soltarConfetes();
+            document.getElementById('resultadoRoleta').textContent = resultadoFinal;
+            tocarSomEfeito(); // ✅ Som
+            soltarConfetes(); // ✅ Confetes
         }, 4000);
     }
 
@@ -222,7 +230,7 @@ if (canvas) {
 }
 
 // ==============================================
-// 🪙 MOEDA - CÓDIGO TOTALMENTE REESCRITO
+// 🪙 MOEDA - ANIMAÇÃO MAIS FORTE E VISÍVEL
 // ==============================================
 window.jogarMoeda = function() {
     const moedaEl = document.getElementById('moeda');
@@ -236,10 +244,11 @@ window.jogarMoeda = function() {
     document.getElementById('textoCaraDisplay').innerText = textoCaraInput.value || 'CARA';
     document.getElementById('textoCoroaDisplay').innerText = textoCoroaInput.value || 'COROA';
 
-    // 🔧 RESET FORÇADO - O SEGREDO PARA FUNCIONAR SEMPRE
+    // Reset FORÇADO
     moedaEl.style.transition = 'none';
     moedaEl.classList.remove('girando', 'parando', 'cara-final', 'coroa-final');
-    
+    void moedaEl.offsetWidth;
+
     setTimeout(() => {
         moedaEl.classList.add('girando');
 
@@ -257,11 +266,11 @@ window.jogarMoeda = function() {
             }
 
             setTimeout(() => {
-                tocarSomEfeito();
-                soltarConfetes();
-            }, 800);
+                tocarSomEfeito(); // ✅ Som
+                soltarConfetes(); // ✅ Confetes
+            }, 600);
 
-        }, 1000);
+        }, 1200); // Gira por mais tempo para ficar bonito
 
     }, 50);
 }
