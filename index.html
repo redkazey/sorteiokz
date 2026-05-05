@@ -6,12 +6,14 @@
     <title>Sorteador Online | Rápido e Fácil</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Biblioteca de Confetes -->
+    <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.min.js"></script>
 </head>
 <body>
     <div class="container">
         <header class="header">
             <h1>🎲 Sorteador Online</h1>
-            <p>Rápido, fácil e grátis. Faça seus sorteios na hora!</p>
+            <p>Rápido, fácil e divertido! Faça seus sorteios na hora.</p>
         </header>
 
         <!-- Menu de Navegação -->
@@ -54,6 +56,14 @@
             <!-- Aba 3: Roleta -->
             <div class="tab-content" id="roleta">
                 <h2>Roleta da Sorte</h2>
+                
+                <!-- Campo para editar opções -->
+                <div class="input-roleta">
+                    <label>Digite uma opção por linha:</label>
+                    <textarea id="opcoesRoleta" placeholder="Ex:&#10;Ganhou!&#10;Prêmio Top&#10;Tente novamente" rows="4">Prêmio 1&#10;Prêmio 2&#10;Prêmio 3&#10;Prêmio 4&#10;Prêmio 5&#10;Prêmio 6</textarea>
+                    <button class="btn-atualizar" onclick="atualizarRoleta()">Atualizar Roleta</button>
+                </div>
+
                 <div class="roleta-container">
                     <canvas id="roleta"></canvas>
                     <div class="marcador"></div>
@@ -77,6 +87,9 @@
 
         </div>
     </div>
+
+    <!-- Som de Festa -->
+    <audio id="somFesta" src="https://assets.mixkit.co/sfx/preview/mixkit-fairytale-winner-announcement-613.mp3" preload="auto">
 
     <script src="script.js"></script>
 </body>
