@@ -56,8 +56,8 @@ function sortearNumero() {
         contador++;
         if(contador > 12) {
             clearInterval(intervalo);
-            tocarSomEfeito(); // ✅ Som
-            soltarConfetes(); // ✅ Confetes
+            tocarSomEfeito();
+            soltarConfetes();
         }
     }, 80);
 }
@@ -114,14 +114,14 @@ function sortearNome() {
         contador++;
         if(contador > 15) {
             clearInterval(intervalo);
-            tocarSomEfeito(); // ✅ Som
-            soltarConfetes(); // ✅ Confetes
+            tocarSomEfeito();
+            soltarConfetes();
         }
     }, 100);
 }
 
 // ==============================================
-// 🎡 ROLETA - RESULTADO 100% PRECISO AGORA
+// 🎡 ROLETA - TEXTO CONSERTADO E RESULTADO CERTO
 // ==============================================
 const canvas = document.getElementById('roletaCanvas');
 let opcoesRoleta = ['Prêmio 1', 'Prêmio 2', 'Prêmio 3', 'Prêmio 4', 'Prêmio 5', 'Prêmio 6'];
@@ -154,9 +154,19 @@ if (canvas) {
             
             ctx.save();
             ctx.translate(tamanho/2, tamanho/2);
-            ctx.rotate(inicio + anguloPorCorte / 2);
+            
+            // ✅ CONSERTO DO TEXTO INVERTIDO
+            const anguloTexto = inicio + anguloPorCorte / 2;
+            ctx.rotate(anguloTexto);
+            
+            // Se o texto estiver na parte de baixo, gira ele 180 graus para não ficar de cabeça para baixo
+            if (anguloTexto > Math.PI / 2 && anguloTexto < Math.PI * 1.5) {
+                ctx.rotate(Math.PI); 
+            }
+            
             ctx.fillStyle = '#fff';
             ctx.font = 'bold 12px Inter';
+            ctx.textAlign = "left";
             ctx.fillText(opcao.substring(0, 12), 40, 5);
             ctx.restore();
         });
@@ -194,33 +204,28 @@ if (canvas) {
         });
     }
 
-    // ✅ FUNÇÃO CORRIGIDA - AGORA O RESULTADO É EXATO
+    // ✅ FUNÇÃO DE GIRAR - RESULTADO EXATO
     window.girarRoleta = function() {
         if(opcoesRoleta.length < 2) {
             alert('Adicione pelo menos 2 opções!');
             return;
         }
 
-        // Sorteia o índice REAL
         const indiceSorteado = Math.floor(Math.random() * opcoesRoleta.length);
         const resultadoFinal = opcoesRoleta[indiceSorteado];
 
-        // Calcula o ângulo exato para parar naquele item
         const anguloPorCorte = 360 / opcoesRoleta.length;
-        // Ajustamos para que a seta aponte exatamente no centro do prêmio
         const anguloParada = 360 - (indiceSorteado * anguloPorCorte + anguloPorCorte / 2);
         
-        // Soma várias voltas para dar impressão de giro
         anguloAtual = anguloParada + (360 * 8); 
 
         canvas.style.transition = 'transform 4s cubic-bezier(0.2, 0.8, 0.2, 1)';
         canvas.style.transform = `rotate(${anguloAtual}deg)`;
         
-        // Mostra o resultado EXATO que foi calculado
         setTimeout(() => {
             document.getElementById('resultadoRoleta').textContent = resultadoFinal;
-            tocarSomEfeito(); // ✅ Som
-            soltarConfetes(); // ✅ Confetes
+            tocarSomEfeito();
+            soltarConfetes();
         }, 4000);
     }
 
@@ -230,7 +235,7 @@ if (canvas) {
 }
 
 // ==============================================
-// 🪙 MOEDA - ANIMAÇÃO MAIS FORTE E VISÍVEL
+// 🪙 MOEDA - ANIMAÇÃO FORÇADA E PERFEITA
 // ==============================================
 window.jogarMoeda = function() {
     const moedaEl = document.getElementById('moeda');
@@ -240,11 +245,10 @@ window.jogarMoeda = function() {
     
     if(!moedaEl) return;
 
-    // Atualiza textos
     document.getElementById('textoCaraDisplay').innerText = textoCaraInput.value || 'CARA';
     document.getElementById('textoCoroaDisplay').innerText = textoCoroaInput.value || 'COROA';
 
-    // Reset FORÇADO
+    // 🔧 RESET TOTAL
     moedaEl.style.transition = 'none';
     moedaEl.classList.remove('girando', 'parando', 'cara-final', 'coroa-final');
     void moedaEl.offsetWidth;
@@ -266,12 +270,11 @@ window.jogarMoeda = function() {
             }
 
             setTimeout(() => {
-                tocarSomEfeito(); // ✅ Som
-                soltarConfetes(); // ✅ Confetes
+                tocarSomEfeito();
+                soltarConfetes();
             }, 600);
 
-        }, 1200); // Gira por mais tempo para ficar bonito
+        }, 1200);
 
     }, 50);
 }
-
