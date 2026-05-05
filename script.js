@@ -1,18 +1,22 @@
-// --- TROCA DE ABAS ---
-const botoes = document.querySelectorAll('.tab-btn');
-const abas = document.querySelectorAll('.tab-content');
+console.log("Script carregado!"); // Aviso para ver se está funcionando
 
-botoes.forEach(btn => {
-    btn.addEventListener('click', () => {
-        const alvo = btn.dataset.tab;
-        
-        // Remove active de todos
-        botoes.forEach(b => b.classList.remove('active'));
-        abas.forEach(a => a.classList.remove('active'));
-        
-        // Adiciona active no clicado
-        btn.classList.add('active');
-        document.getElementById(alvo).classList.add('active');
+// --- TROCA DE ABAS ---
+document.addEventListener('DOMContentLoaded', function() {
+    const botoes = document.querySelectorAll('.tab-btn');
+    const abas = document.querySelectorAll('.tab-content');
+
+    botoes.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const alvo = btn.getAttribute('data-tab');
+            
+            // Remove active de todos
+            botoes.forEach(b => b.classList.remove('active'));
+            abas.forEach(a => a.classList.remove('active'));
+            
+            // Adiciona active no clicado
+            btn.classList.add('active');
+            document.getElementById(alvo).classList.add('active');
+        });
     });
 });
 
@@ -58,56 +62,59 @@ function sortearNome() {
 
 // --- 3. ROLETA ---
 const canvas = document.getElementById('roleta');
-const ctx = canvas.getContext('2d');
-const tamanho = 300;
-canvas.width = tamanho;
-canvas.height = tamanho;
+if (canvas) {
+    const ctx = canvas.getContext('2d');
+    const tamanho = 300;
+    canvas.width = tamanho;
+    canvas.height = tamanho;
 
-const opcoes = ['Prêmio 1', 'Prêmio 2', 'Prêmio 3', 'Prêmio 4', 'Prêmio 5', 'Prêmio 6'];
-const cores = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD'];
+    const opcoes = ['Prêmio 1', 'Prêmio 2', 'Prêmio 3', 'Prêmio 4', 'Prêmio 5', 'Prêmio 6'];
+    const cores = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD'];
 
-function desenharRoleta() {
-    const anguloPorCorte = (2 * Math.PI) / opcoes.length;
-    
-    opcoes.forEach((opcao, i) => {
-        const inicio = i * anguloPorCorte;
-        const fim = (i + 1) * anguloPorCorte;
-
-        ctx.beginPath();
-        ctx.moveTo(tamanho/2, tamanho/2);
-        ctx.arc(tamanho/2, tamanho/2, tamanho/2, inicio, fim);
-        ctx.fillStyle = cores[i];
-        ctx.fill();
+    function desenharRoleta() {
+        const anguloPorCorte = (2 * Math.PI) / opcoes.length;
         
-        // Texto
-        ctx.save();
-        ctx.translate(tamanho/2, tamanho/2);
-        ctx.rotate(inicio + anguloPorCorte / 2);
-        ctx.fillStyle = '#fff';
-        ctx.font = 'bold 14px Inter';
-        ctx.fillText(opcao, 50, 5);
-        ctx.restore();
-    });
-}
-desenharRoleta();
+        opcoes.forEach((opcao, i) => {
+            const inicio = i * anguloPorCorte;
+            const fim = (i + 1) * anguloPorCorte;
 
-function girarRoleta() {
-    const anguloAleatorio = Math.random() * 360 + 360 * 5; // Gira 5x + parada
-    canvas.style.transform = `rotate(${anguloAleatorio}deg)`;
-    
-    setTimeout(() => {
-        const resultado = opcoes[Math.floor(Math.random() * opcoes.length)];
-        document.getElementById('resultadoRoleta').textContent = resultado;
-    }, 4000);
+            ctx.beginPath();
+            ctx.moveTo(tamanho/2, tamanho/2);
+            ctx.arc(tamanho/2, tamanho/2, tamanho/2, inicio, fim);
+            ctx.fillStyle = cores[i];
+            ctx.fill();
+            
+            ctx.save();
+            ctx.translate(tamanho/2, tamanho/2);
+            ctx.rotate(inicio + anguloPorCorte / 2);
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 14px Inter';
+            ctx.fillText(opcao, 50, 5);
+            ctx.restore();
+        });
+    }
+    desenharRoleta();
+
+    window.girarRoleta = function() {
+        const anguloAleatorio = Math.random() * 360 + 360 * 5;
+        canvas.style.transform = `rotate(${anguloAleatorio}deg)`;
+        
+        setTimeout(() => {
+            const resultado = opcoes[Math.floor(Math.random() * opcoes.length)];
+            document.getElementById('resultadoRoleta').textContent = resultado;
+        }, 4000);
+    }
 }
 
 // --- 4. CARA OU COROA ---
-function jogarMoeda() {
+window.jogarMoeda = function() {
     const moedaEl = document.getElementById('moeda');
     const resultadoEl = document.getElementById('resultadoMoeda');
     
+    if(!moedaEl) return;
+    
     moedaEl.classList.remove('virar');
-    void moedaEl.offsetWidth; // Reset animação
+    void moedaEl.offsetWidth;
     moedaEl.classList.add('virar');
     
     setTimeout(() => {
